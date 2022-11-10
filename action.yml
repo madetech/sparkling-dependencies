@@ -1,0 +1,15 @@
+name: Sparkling dependencies
+description: Makes dependabot follow Trunk-based development.
+
+branding:
+  color: blue
+  icon: git-merge
+
+inputs:
+  github-token:
+    description: The GitHub token used to merge the pull-request
+    required: true
+
+runs:
+  using: docker
+  image: docker://ghcr.io/<todo>
