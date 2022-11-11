@@ -6,7 +6,6 @@ type PullRequest struct {
 
 type Event struct {
 	Name        string
-	Sender      *string
 	PullRequest *PullRequest
 }
 

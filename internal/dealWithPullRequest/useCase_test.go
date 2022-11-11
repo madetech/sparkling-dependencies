@@ -38,15 +38,13 @@ func TestExitsIfNotPullRequestTargetEvent(t *testing.T) {
 	})
 
 	t.Run("Does not exit if pull request target event", func(t *testing.T) {
-		sender := "dependabot[bot]"
-		dealWithPullRequest := New(Event{Name: "pull_request_target", Sender: &sender, PullRequest: &PullRequest{Sender: sender}})
+		dealWithPullRequest := New(Event{Name: "pull_request_target", PullRequest: &PullRequest{Sender: "dependabot[bot]"}})
 		presenter := dealWithPullRequest.ExecuteWithSpy()
 		presenter.AssertExitNotCalled(t)
 	})
 
 	t.Run("Exits if not dependabot", func(t *testing.T) {
-		sender := "craigjbass"
-		dealWithPullRequest := New(Event{Name: "pull_request_target", Sender: &sender, PullRequest: &PullRequest{Sender: sender}})
+		dealWithPullRequest := New(Event{Name: "pull_request_target", PullRequest: &PullRequest{Sender: "craigjbass"}})
 		presenter := dealWithPullRequest.ExecuteWithSpy()
 		presenter.AssertExitCalled(t)
 	})
