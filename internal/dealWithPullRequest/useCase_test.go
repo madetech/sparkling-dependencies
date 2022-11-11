@@ -32,22 +32,21 @@ func (uc dependencies) ExecuteWithSpy() SpyPresenter {
 
 func TestExitsIfNotPullRequestTargetEvent(t *testing.T) {
 	t.Run("Can exit if not a pull request target event", func(t *testing.T) {
-		sender := "dependabot[bot]"
-		dealWithPullRequest := New(Event{Name: "not_expected", Sender: &sender})
+		dealWithPullRequest := New(Event{Name: "not_expected"})
 		presenter := dealWithPullRequest.ExecuteWithSpy()
 		presenter.AssertExitCalled(t)
 	})
 
 	t.Run("Does not exit if pull request target event", func(t *testing.T) {
 		sender := "dependabot[bot]"
-		dealWithPullRequest := New(Event{Name: "pull_request_target", Sender: &sender})
+		dealWithPullRequest := New(Event{Name: "pull_request_target", Sender: &sender, PullRequest: &PullRequest{Sender: sender}})
 		presenter := dealWithPullRequest.ExecuteWithSpy()
 		presenter.AssertExitNotCalled(t)
 	})
 
 	t.Run("Exits if not dependabot", func(t *testing.T) {
 		sender := "craigjbass"
-		dealWithPullRequest := New(Event{Name: "pull_request_target", Sender: &sender})
+		dealWithPullRequest := New(Event{Name: "pull_request_target", Sender: &sender, PullRequest: &PullRequest{Sender: sender}})
 		presenter := dealWithPullRequest.ExecuteWithSpy()
 		presenter.AssertExitCalled(t)
 	})

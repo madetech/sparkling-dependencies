@@ -1,8 +1,13 @@
 package dealWithPullRequest
 
+type PullRequest struct {
+	Sender string
+}
+
 type Event struct {
-	Name   string
-	Sender *string
+	Name        string
+	Sender      *string
+	PullRequest *PullRequest
 }
 
 type dependencies struct {
@@ -20,15 +25,20 @@ type Presenter interface {
 }
 
 func (d dependencies) Execute(presenter Presenter) {
-	if d.Event.Sender == nil {
+	if d.isNotPullRequestTarget() || d.hasNoValidPullRequestData() {
+		presenter.Exit()
 		return
 	}
 
-	if d.Event.Name != "pull_request_target" {
+	if d.Event.PullRequest.Sender != "dependabot[bot]" {
 		presenter.Exit()
 	}
+}
 
-	if *d.Event.Sender != "dependabot[bot]" {
-		presenter.Exit()
-	}
+func (d dependencies) hasNoValidPullRequestData() bool {
+	return d.Event.PullRequest == nil
+}
+
+func (d dependencies) isNotPullRequestTarget() bool {
+	return d.Event.Name != "pull_request_target"
 }
