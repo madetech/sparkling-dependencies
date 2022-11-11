@@ -19,8 +19,15 @@ func New(event Event) *dependencies {
 	}
 }
 
+type Comment struct {
+	Body       string
+	Repository string
+	Number     uint32
+}
+
 type Presenter interface {
 	Exit()
+	PostComment(comment Comment)
 }
 
 func (d dependencies) Execute(presenter Presenter) {
@@ -31,7 +38,10 @@ func (d dependencies) Execute(presenter Presenter) {
 
 	if d.Event.PullRequest.Sender != "dependabot[bot]" {
 		presenter.Exit()
+		return
 	}
+
+	presenter.PostComment(Comment{Repository: "madetech/wow", Body: "@dependabot merge", Number: 1})
 }
 
 func (d dependencies) hasNoValidPullRequestData() bool {
