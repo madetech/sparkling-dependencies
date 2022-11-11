@@ -1,8 +1,12 @@
 FROM golang AS builder
 WORKDIR /go/src/sparkling-dependencies
 ADD . ./
+
+FROM builder AS test
+
+FROM builder AS compiled
 RUN CGO_ENABLED=0 go build -ldflags '-extldflags "-static"' -o ./compiled github.com/madetech/sparkling-dependencies/cmd/action
 
 FROM scratch
-COPY --from=builder /go/src/sparkling-dependencies/compiled/action /action
+COPY --from=compiled /go/src/sparkling-dependencies/compiled/action /action
 ENTRYPOINT ["/action"]
