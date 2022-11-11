@@ -1,7 +1,9 @@
 package dealWithPullRequest
 
 type PullRequest struct {
-	Sender string
+	Sender     string
+	Number     uint32
+	Repository string
 }
 
 type Event struct {
@@ -36,12 +38,30 @@ func (d dependencies) Execute(presenter Presenter) {
 		return
 	}
 
-	if d.Event.PullRequest.Sender != "dependabot[bot]" {
+	if d.author() != "dependabot[bot]" {
 		presenter.Exit()
 		return
 	}
 
-	presenter.PostComment(Comment{Repository: "madetech/wow", Body: "@dependabot merge", Number: 1})
+	presenter.PostComment(
+		Comment{
+			Repository: d.repository(),
+			Body:       "@dependabot merge",
+			Number:     d.prNumber(),
+		},
+	)
+}
+
+func (d dependencies) author() string {
+	return d.Event.PullRequest.Sender
+}
+
+func (d dependencies) prNumber() uint32 {
+	return d.Event.PullRequest.Number
+}
+
+func (d dependencies) repository() string {
+	return d.Event.PullRequest.Repository
 }
 
 func (d dependencies) hasNoValidPullRequestData() bool {

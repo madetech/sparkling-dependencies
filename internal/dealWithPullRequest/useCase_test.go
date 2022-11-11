@@ -74,8 +74,24 @@ func TestExitsIfNotPullRequestTargetEvent(t *testing.T) {
 	})
 
 	t.Run("Tells dependabot to merge", func(t *testing.T) {
-		dealWithPullRequest := New(Event{Name: "pull_request_target", PullRequest: &PullRequest{Sender: "dependabot[bot]"}})
+		pr := PullRequest{
+			Sender:     "dependabot[bot]",
+			Number:     1,
+			Repository: "madetech/wow",
+		}
+		dealWithPullRequest := New(Event{Name: "pull_request_target", PullRequest: &pr})
 		presenter := dealWithPullRequest.ExecuteWithSpy()
 		presenter.AssertCommented(t, "madetech/wow", 1, "@dependabot merge")
+	})
+
+	t.Run("Tells dependabot to merge 2", func(t *testing.T) {
+		pr := PullRequest{
+			Sender:     "dependabot[bot]",
+			Number:     2,
+			Repository: "madetech/cool",
+		}
+		dealWithPullRequest := New(Event{Name: "pull_request_target", PullRequest: &pr})
+		presenter := dealWithPullRequest.ExecuteWithSpy()
+		presenter.AssertCommented(t, "madetech/cool", 2, "@dependabot merge")
 	})
 }
