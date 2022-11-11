@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/google/go-github/v48/github"
 	"github.com/madetech/sparkling-dependencies/internal/dealWithPullRequest"
 	"os"
@@ -42,8 +43,7 @@ func main() {
 	//client := github.NewClient(tc)
 
 	file := readFile(eventPayloadPath)
-	print(file)
-
+	spew.Dump(file)
 	//var data struct {
 	//	EventName string `json:"eventName"`
 	//	Payload   struct {
