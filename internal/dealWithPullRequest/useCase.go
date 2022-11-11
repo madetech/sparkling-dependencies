@@ -19,5 +19,8 @@ type Presenter interface {
 }
 
 func (d dependencies) Execute(presenter Presenter) {
-	presenter.Exit()
+	if d.Event.Name != "pull_request_target" {
+		presenter.Exit()
+	}
+
 }
