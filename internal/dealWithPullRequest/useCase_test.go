@@ -22,18 +22,22 @@ func (s *SpyPresenter) AssertExitCalled(t *testing.T) {
 	}
 }
 
+func (uc dependencies) ExecuteWithSpy() SpyPresenter {
+	presenter := SpyPresenter{}
+	uc.Execute(&presenter)
+	return presenter
+}
+
 func TestExitsIfNotPullRequestTargetEvent(t *testing.T) {
 	t.Run("Can exit if not a pull request target event", func(t *testing.T) {
 		dealWithPullRequest := New(Event{Name: "not_expected"})
-		presenter := SpyPresenter{}
-		dealWithPullRequest.Execute(&presenter)
+		presenter := dealWithPullRequest.ExecuteWithSpy()
 		presenter.AssertExitCalled(t)
 	})
 
 	t.Run("Does not exit if pull request target event", func(t *testing.T) {
 		dealWithPullRequest := New(Event{Name: "pull_request_target"})
-		presenter := SpyPresenter{}
-		dealWithPullRequest.Execute(&presenter)
+		presenter := dealWithPullRequest.ExecuteWithSpy()
 		presenter.AssertExitNotCalled(t)
 	})
 }
