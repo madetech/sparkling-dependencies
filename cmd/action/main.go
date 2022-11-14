@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	_ "github.com/breml/rootcerts"
 	"github.com/google/go-github/v48/github"
 	"github.com/madetech/sparkling-dependencies/internal/dealWithPullRequest"
 	"golang.org/x/oauth2"

@@ -3,6 +3,7 @@ module github.com/madetech/sparkling-dependencies
 go 1.19
 
 require (
+	github.com/breml/rootcerts v0.2.8
 	github.com/google/go-github/v48 v48.0.0
 	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 )
