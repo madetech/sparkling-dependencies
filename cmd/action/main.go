@@ -24,7 +24,7 @@ func (g GitHubPresenter) PostComment(comment dealWithPullRequest.Comment) {
 	owner := splitRepository[0]
 	repo := splitRepository[1]
 	context.Background()
-	_, _, err := g.client.PullRequests.CreateComment(context.Background(), owner, repo, int(comment.Number), &github.PullRequestComment{
+	_, _, err := g.client.Issues.CreateComment(context.Background(), owner, repo, int(comment.Number), &github.IssueComment{
 		Body: &comment.Body,
 	})
 	if err != nil {
