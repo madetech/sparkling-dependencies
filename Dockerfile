@@ -1,5 +1,8 @@
 FROM golang AS builder
 WORKDIR /go/src/sparkling-dependencies
+ADD go.mod ./
+ADD go.sum ./
+RUN go mod download
 ADD . ./
 
 FROM builder AS test
